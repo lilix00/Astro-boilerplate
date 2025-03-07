@@ -1,29 +1,50 @@
 ---
+// pages/news/[id].astro
 import Base from '@/templates/Base.astro'
 export const prerender = false
-const token =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwd2QiOiJlZTk4ODFmNDRlNzk1ODgyODcyYWNkN2E0N2RjOGJjYyIsImlzcyI6Ind3dy5kZ2JxLm5ldCIsImF1ZCI6Ind3dy5kZ2JxLm5ldCIsImlhdCI6MTc0MTI0MzEyMywibmJmIjoxNzQxMjQzMTIzLCJleHAiOjE3NDM4MzUxMjMsImp0aSI6eyJpZCI6MSwidHlwZSI6ImFkbWluIn19.U_DMquDAQj7dOwDmjl6g2QIQELhFN-xq0WQ2tFlfHbQ'
-
-const { id } = Astro.params
-
-const res = await fetch(`https://www.dgbq.net/api/article/details/${id}`, {
-  method: 'GET', // 或 POST、PUT 等
-  headers: {
-    'Authori-zation': `Bearer ${token}`, // Bearer Token 格式
-    'Content-Type': 'application/json', // 根据需求设置
-  },
-}).then((res) => res.json())
-const newsData = res.data
-console.log('-------', res)
-
 export async function getStaticPaths() {
-  return [
-    { params: { id: 1 } },
-    { params: { id: 2 } },
-    { params: { id: 4 } },
-    { params: { id: 3 } },
-  ]
+  const token =
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwd2QiOiJlZTk4ODFmNDRlNzk1ODgyODcyYWNkN2E0N2RjOGJjYyIsImlzcyI6Ind3dy5kZ2JxLm5ldCIsImF1ZCI6Ind3dy5kZ2JxLm5ldCIsImlhdCI6MTc0MTI0MzEyMywibmJmIjoxNzQxMjQzMTIzLCJleHAiOjE3NDM4MzUxMjMsImp0aSI6eyJpZCI6MSwidHlwZSI6ImFkbWluIn19.U_DMquDAQj7dOwDmjl6g2QIQELhFN-xq0WQ2tFlfHbQ'
+
+  // 1. 调用 API 获取数据
+  // 获取文章列表
+  const res = await fetch(
+    `https://www.dgbq.net/adminapi/cms/cms?pid=0&title=&page=1&limit=20`,
+    {
+      method: 'GET', // 或 POST、PUT 等
+      headers: {
+        'Authori-zation': `Bearer ${token}`, // Bearer Token 格式
+        'Content-Type': 'application/json', // 根据需求设置
+      },
+    }
+  ).then((res) => res.json())
+  const posts = res.data.list
+
+  // 2. 生成动态路由参数
+  return Promise.all(
+    posts.map(async (post) => {
+      // 获取文章详情
+      const res = await fetch(
+        `https://www.dgbq.net/api/article/details/${post.id}`,
+        {
+          method: 'GET', // 或 POST、PUT 等
+          headers: {
+            Authorization: `Bearer ${token}`, // Bearer Token 格式
+            'Content-Type': 'application/json', // 根据需求设置
+          },
+        }
+      ).then((res) => res.json())
+      const newsData = res.data
+      return {
+        params: { id: post.id.toString() }, // 确保 id 是字符串
+        props: { newsData },
+      }
+    })
+  )
 }
+
+// 3. 接收 props 数据
+const { newsData } = Astro.props
 ---
 
 <Base head={{ title: newsData.title, description: '' }}>
