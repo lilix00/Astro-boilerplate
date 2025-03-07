@@ -27,14 +27,23 @@ export async function getStaticPaths() {
 ---
 
 <Base head={{ title: newsData.title, description: '' }}>
-  <div class="desc">
-    <div class="catename">{newsData.catename}</div>
-    <div class="add_time">发布时间：{newsData.add_time}</div>
-    <div class="visit">浏览量：{newsData.visit}</div>
+  <div class="news">
+    <h2 class="title">{newsData.title}</h2>
+    <div class="desc">
+      <div class="catename">{newsData.catename}</div>
+      <div class="add_time">发布时间：{newsData.add_time}</div>
+      <div class="visit">浏览量：{newsData.visit}</div>
+    </div>
+    <div class="content" set:html={newsData.content} />
   </div>
-  <div class="content" set:html={newsData.content} />
 </Base>
 <style>
+  .news {
+    margin: 0 10vw;
+  }
+  .title {
+    text-align: center;
+  }
   .desc {
     display: flex;
     gap: 20px;
