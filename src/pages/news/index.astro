@@ -1,7 +1,6 @@
 ---
 import Base from '@/templates/Base.astro'
-const token =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwd2QiOiJlZTk4ODFmNDRlNzk1ODgyODcyYWNkN2E0N2RjOGJjYyIsImlzcyI6Ind3dy5kZ2JxLm5ldCIsImF1ZCI6Ind3dy5kZ2JxLm5ldCIsImlhdCI6MTc0MTI0MzEyMywibmJmIjoxNzQxMjQzMTIzLCJleHAiOjE3NDM4MzUxMjMsImp0aSI6eyJpZCI6MSwidHlwZSI6ImFkbWluIn19.U_DMquDAQj7dOwDmjl6g2QIQELhFN-xq0WQ2tFlfHbQ'
+const token = import.meta.env.API_TOKEN
 const res = await fetch(
   `https://www.dgbq.net/adminapi/cms/cms?pid=0&title=&page=1&limit=20`,
   {
@@ -29,9 +28,7 @@ const pageTitle = '官方动态'
           />
           <div>
             <p class="title">{news.title}</p>
-            <p class="message">
-              <em>{news.intr}</em>
-            </p>
+            <p class="message">{news.synopsis}</p>
             <div class="attribute">
               <p class="time">{news.add_time}</p>
               <p class="view">{news.visit}</p>
@@ -41,61 +38,61 @@ const pageTitle = '官方动态'
       ))
     }
   </div>
+  <style>
+    a {
+      text-decoration: none;
+    }
+
+    .newList {
+      margin: 0 10vw;
+    }
+
+    .news {
+      display: flex;
+      padding: 25px 30px;
+      margin-top: 4px;
+      background-color: rgb(30 41 59 / var(--tw-bg-opacity));
+    }
+
+    .news img {
+      width: 250px;
+      height: 140px;
+      border-radius: 2px;
+      margin-right: 20px;
+      background-color: #d8d8d8;
+      object-fit: cover;
+    }
+
+    .title {
+      margin: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 28px;
+      color: #fff;
+    }
+    .message {
+      margin: 0;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      margin-top: 11px;
+      font-size: 14px;
+      line-height: 22px;
+      color: #9b9b9b;
+    }
+    .attribute {
+      display: flex;
+      margin-top: 11px;
+      font-size: 14px;
+      line-height: 14px;
+      color: #bbbbbb;
+    }
+    .time {
+      margin-right: 40px;
+    }
+  </style>
 </Base>
-<style>
-  a {
-    text-decoration: none;
-  }
-
-  .newList {
-    margin: 0 10vw;
-  }
-
-  .news {
-    display: flex;
-    padding: 25px 30px;
-    margin-top: 4px;
-    background-color: rgb(30 41 59 / var(--tw-bg-opacity));
-  }
-
-  .news img {
-    width: 250px;
-    height: 140px;
-    border-radius: 2px;
-    margin-right: 20px;
-    background-color: #d8d8d8;
-    object-fit: cover;
-  }
-
-  .title {
-    margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 28px;
-    color: #fff;
-  }
-  .message {
-    margin: 0;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    margin-top: 11px;
-    font-size: 14px;
-    line-height: 22px;
-    color: #777777;
-  }
-  .attribute {
-    display: flex;
-    margin-top: 11px;
-    font-size: 14px;
-    line-height: 14px;
-    color: #bbbbbb;
-  }
-  .time {
-    margin-right: 40px;
-  }
-</style>
